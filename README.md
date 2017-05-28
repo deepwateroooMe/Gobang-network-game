@@ -8,10 +8,13 @@
 
 ### 逻辑框图
 
-![hualitong](http://xiaoliming96.com/images/hualitong.png)  
+* ![总览](http://xiaoliming96.com/images/gobang/gobang_main.png)  
+* ![服务器部分](http://xiaoliming96.com/images/gobang/gobang_server.png)  
+
 
 ### 待做事项
 
+>* ~~补充逻辑框图~~
 >* 完成单机模式的三子棋
 >* 完成客户端<=>服务器的通信
 >* 完成客户端<=>服务器<=>客户端的通信
