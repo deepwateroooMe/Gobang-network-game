@@ -1,8 +1,8 @@
 南行五子棋
-==
+===
 
 基于TCP协议的五子棋联机对战平台
---
+---
 
 >山就在那里
 
@@ -10,6 +10,7 @@
 
 * ![总览](http://xiaoliming96.com/images/gobang/gobang_main.png)  
 * ![服务器部分](http://xiaoliming96.com/images/gobang/gobang_server.png)  
+* ![客户机部分](http://xiaoliming96.com/images/gobang/gobang_client.png)  
 
 
 ### 待做事项
