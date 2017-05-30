@@ -16,5 +16,15 @@ namespace GobangClient
         {
             InitializeComponent();
         }
+
+        private void btnConnect_Click(object sender, EventArgs e)
+        {
+
+        }
+    }
+    public class TcpHelper
+    {
+        private const string ServerAddress = "119.23.56.207";
+        private
     }
 }
