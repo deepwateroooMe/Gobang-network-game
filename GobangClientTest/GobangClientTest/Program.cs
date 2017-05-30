@@ -12,42 +12,41 @@ using System.IO;
 using System.Net;
 using System.Net.Sockets;
 
-namespace GobangServer
+namespace GobangClientTest
 {
     class Program
     {
         static void Main(string[] args)
         {
-            TcpHelperServer ths = new TcpHelperServer();
-            int i = 0;
-            while (true) 
+            TcpHelperClient thc = new TcpHelperClient();
+            while (true)
             {
-                Console.WriteLine("server" + ths.Reader());
-                ths.Writer(i + "  200");
-                i++;
+                string now = Console.ReadLine();
+                if (now != "read")
+                    thc.Writer(now);
+                else
+                    Console.WriteLine(thc.Reader());
             }
         }
     }
-    public class TcpHelperServer
+    public class TcpHelperClient
     {
         private static string ServerAddress = "127.0.0.1";
         private static int ServerPort = 9961;
         private static IPAddress ServerIPAddress = IPAddress.Parse(ServerAddress);
         private static IPEndPoint ServerIPEndPoint = new IPEndPoint(ServerIPAddress, ServerPort);
-        private TcpListener TcpListener = null;
-        private TcpClient TcpClient = null;
-        private NetworkStream TcpStream = null;
+        private TcpClient tcpclient = null;
+        private NetworkStream tcpstream = null;
         private StreamReader sr = null;
         private StreamWriter sw = null;
 
-        public TcpHelperServer()
+        public TcpHelperClient()
         {
-            TcpListener = new TcpListener(ServerIPEndPoint);
-            TcpListener.Start();
-            TcpClient = TcpListener.AcceptTcpClient();
-            TcpStream = TcpClient.GetStream();
-            sr = new StreamReader(TcpStream);
-            sw = new StreamWriter(TcpStream);
+            tcpclient = new TcpClient();
+            tcpclient.Connect(ServerIPEndPoint);
+            tcpstream = tcpclient.GetStream();
+            sr = new StreamReader(tcpstream);
+            sw = new StreamWriter(tcpstream);
         }
         public void Writer(string message)
         {
