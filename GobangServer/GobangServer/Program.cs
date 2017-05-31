@@ -16,35 +16,69 @@ namespace GobangServer
 {
     class Program
     {
+        
+        ManualResetEvent AllDone = new ManualResetEvent(false);
         static void Main(string[] args)
         {
-            TcpHelperServer ths = new TcpHelperServer();
-            int i = 0;
-            while (true) 
+            TcpHelperServer ServerMain = new TcpHelperServer();
+            Thread ListenerThread = new Thread(new ThreadStart(ServerMain.AcceptPlayerConnection));
+            ListenerThread.Start();
+            while (true)
             {
-                Console.WriteLine("server" + ths.Reader());
-                ths.Writer(i + "  200");
-                i++;
+                foreach(Player p in TcpHelperServer.QueueForWaiting)
+                {
+                    p.Writer(200.ToString());
+                }
+                Console.ReadLine();
             }
         }
     }
     public class TcpHelperServer
     {
-        private static string ServerAddress = "127.0.0.1";
+        public static Queue<Player> QueueForWaiting = new Queue<Player>();
         private static int ServerPort = 9961;
-        private static IPAddress ServerIPAddress = IPAddress.Parse(ServerAddress);
-        private static IPEndPoint ServerIPEndPoint = new IPEndPoint(ServerIPAddress, ServerPort);
-        private TcpListener TcpListener = null;
-        private TcpClient TcpClient = null;
+        private static IPEndPoint ServerIPEndPoint = new IPEndPoint(IPAddress.Any, ServerPort);
+        private static TcpListener TcpListener = null;
         private NetworkStream TcpStream = null;
         private StreamReader sr = null;
         private StreamWriter sw = null;
 
         public TcpHelperServer()
         {
-            TcpListener = new TcpListener(ServerIPEndPoint);
-            TcpListener.Start();
-            TcpClient = TcpListener.AcceptTcpClient();
+            if (TcpListener == null)
+            {
+                TcpListener = new TcpListener(ServerIPEndPoint);
+                TcpListener.Start();
+            }
+        }
+        public void AcceptPlayerConnection()
+        {
+            while (true)
+            {
+                TcpClient newclient = TcpListener.AcceptTcpClient();
+                Player player = new Player(newclient);
+                QueueForWaiting.Enqueue(player);
+            }
+        }
+        public void Writer(string message)
+        {
+            sw.WriteLine(message);
+            sw.Flush();
+        }
+        public string Reader()
+        {
+            return sr.ReadLine();
+        }
+    }
+    public class Player
+    {
+        public TcpClient TcpClient = null;
+        private StreamReader sr = null;
+        private StreamWriter sw = null;
+        private NetworkStream TcpStream = null;
+        public Player(TcpClient tcpclient)
+        {
+            TcpClient = tcpclient;
             TcpStream = TcpClient.GetStream();
             sr = new StreamReader(TcpStream);
             sw = new StreamWriter(TcpStream);
