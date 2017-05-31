@@ -18,7 +18,7 @@
 >* ~~补充逻辑框图~~
 >* ~~完成客户端<=>服务器的同步通信~~
 >* ~~服务器开线程负责监听多个客户端的连接请求~~
->* 完成客户端<=>服务器<=>客户端的同步通信
+>* ~~完成客户端<=>服务器<=>客户端的同步通信~~
 >* 完成聊天系统
 >* 用同步通信实现“下棋”
 >* 完成客户端<=>服务器的异步通信
@@ -46,7 +46,13 @@
 
 #### 2017-5-31
 
->* 服务器现在分配了一个线程专门监听连接请求
->   * 封装了Player类，在TcpHelperServer类中用一个队列存储了所有Player的集合
+>* 完成了客户端<=>服务器<=>客户端的同步多线程通信
 >* 重构代码
 >   * 重新封装了TcpHelperServer类，令Player类承担了其通信部分的职能
+>   * 封装了Player与Game类，在TcpHelperServer类中用队列存储了所有Player与Game的集合
+>* 服务器现在分配了多个线程专门执行特定任务
+>   * TcpHelperServer类的ListenerThread，GameMakerThread分别负责生成TcpClient并封装成Player，将Player两两分组
+>   * Player类的ReaderThread负责监听网络流，读到信息后存入MessageBox
+>   * Game类的TalkerThread负责监听MessageBox，将比赛双方的信息分别写入对方的网络流
+>* 习惯代替配置（命名规范）
+>   * 线程的命名在末尾加上Thread，托管给线程的方法在末尾加上Threadwork，所有线程属于实例变量，在实例化的最后被赋值与启用

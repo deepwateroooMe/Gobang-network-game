@@ -16,13 +16,9 @@ namespace GobangServer
 {
     class Program
     {
-        
-        ManualResetEvent AllDone = new ManualResetEvent(false);
         static void Main(string[] args)
         {
             TcpHelperServer ServerMain = new TcpHelperServer();
-            Thread ListenerThread = new Thread(new ThreadStart(ServerMain.AcceptPlayerConnection));
-            ListenerThread.Start();
             while (true)
             {
                 foreach(Player p in TcpHelperServer.QueueForWaiting)
@@ -36,22 +32,37 @@ namespace GobangServer
     public class TcpHelperServer
     {
         public static Queue<Player> QueueForWaiting = new Queue<Player>();
+        public static Queue<Game> QueueForPlaying = new Queue<Game>();
         private static int ServerPort = 9961;
         private static IPEndPoint ServerIPEndPoint = new IPEndPoint(IPAddress.Any, ServerPort);
         private static TcpListener TcpListener = null;
-        private NetworkStream TcpStream = null;
-        private StreamReader sr = null;
-        private StreamWriter sw = null;
-
+        public Thread ListenerThread = null;
+        public Thread GameMakerThread = null;
         public TcpHelperServer()
         {
-            if (TcpListener == null)
+            TcpListener = new TcpListener(ServerIPEndPoint);
+            TcpListener.Start();
+            ListenerThread = new Thread(new ThreadStart(AcceptPlayerConnectionThreadwork));
+            ListenerThread.Start();
+            GameMakerThread = new Thread(new ThreadStart(MakeGameThreadwork));
+            GameMakerThread.Start();
+        }
+        public void MakeGameThreadwork()
+        {
+            while(true)
             {
-                TcpListener = new TcpListener(ServerIPEndPoint);
-                TcpListener.Start();
+                if (QueueForWaiting.Count >= 2)
+                {
+                    Player p1 = QueueForWaiting.Dequeue();
+                    Player p2 = QueueForWaiting.Dequeue();
+                    p1.Writer("GameBegin");
+                    p2.Writer("GameBegin");
+                    Game game = new Game(p1, p2);
+                    QueueForPlaying.Enqueue(game);
+                }
             }
         }
-        public void AcceptPlayerConnection()
+        public void AcceptPlayerConnectionThreadwork()
         {
             while (true)
             {
@@ -60,14 +71,35 @@ namespace GobangServer
                 QueueForWaiting.Enqueue(player);
             }
         }
-        public void Writer(string message)
+    }
+    public class Game
+    {
+        public Player red = null;
+        public Player black = null;
+        public Thread TalkerThread = null;
+        public Game(Player p1,Player p2)
         {
-            sw.WriteLine(message);
-            sw.Flush();
+            red = p1;
+            black = p2;
+            TalkerThread = new Thread(new ThreadStart(TalkThreadwork));
+            TalkerThread.Start();
         }
-        public string Reader()
+        public void TalkThreadwork()
         {
-            return sr.ReadLine();
+            string content;
+            while (true)
+            {
+                while (red.MessageBox.Count != 0)
+                {
+                    content = red.MessageBox.Dequeue();
+                    black.Writer(content);
+                }
+                while (black.MessageBox.Count != 0)
+                {
+                    content = black.MessageBox.Dequeue();
+                    red.Writer(content);
+                }
+            }
         }
     }
     public class Player
@@ -75,22 +107,29 @@ namespace GobangServer
         public TcpClient TcpClient = null;
         private StreamReader sr = null;
         private StreamWriter sw = null;
-        private NetworkStream TcpStream = null;
+        public NetworkStream TcpStream = null;
+        public Queue<string> MessageBox = new Queue<string>();
+        public Thread ReaderThread;
         public Player(TcpClient tcpclient)
         {
             TcpClient = tcpclient;
             TcpStream = TcpClient.GetStream();
             sr = new StreamReader(TcpStream);
             sw = new StreamWriter(TcpStream);
+            ReaderThread = new Thread(new ThreadStart(ReadtoBoxThreadwork));
+            ReaderThread.Start();
         }
         public void Writer(string message)
         {
             sw.WriteLine(message);
             sw.Flush();
         }
-        public string Reader()
+        public void ReadtoBoxThreadwork()
         {
-            return sr.ReadLine();
+            while (true)
+            {
+                MessageBox.Enqueue(sr.ReadLine());
+            }
         }
     }
 }
