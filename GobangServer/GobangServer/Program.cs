@@ -16,12 +16,13 @@ namespace GobangServer
 {
     class Program
     {
+        static TcpHelperServer ServerMain;
         static void Main(string[] args)
         {
-            TcpHelperServer ServerMain = new TcpHelperServer();
+            ServerMain = new TcpHelperServer();
             while (true)
             {
-                foreach(Player p in TcpHelperServer.QueueForWaiting)
+                foreach(Player p in TcpHelperServer.QueueForPlayer)
                 {
                     p.Writer(200.ToString());
                 }
@@ -31,13 +32,15 @@ namespace GobangServer
     }
     public class TcpHelperServer
     {
-        public static Queue<Player> QueueForWaiting = new Queue<Player>();
-        public static Queue<Game> QueueForPlaying = new Queue<Game>();
+        public static Queue<int> queue { get; set; }
+        public static Queue<Player> QueueForPlayer = new Queue<Player>();
+        public static List<Game> ListForGame = new List<Game>();
         private static int ServerPort = 9961;
         private static IPEndPoint ServerIPEndPoint = new IPEndPoint(IPAddress.Any, ServerPort);
         private static TcpListener TcpListener = null;
         public Thread ListenerThread = null;
         public Thread GameMakerThread = null;
+        public Thread GameDestroyerThread = null;
         public TcpHelperServer()
         {
             TcpListener = new TcpListener(ServerIPEndPoint);
@@ -47,18 +50,22 @@ namespace GobangServer
             GameMakerThread = new Thread(new ThreadStart(MakeGameThreadwork));
             GameMakerThread.Start();
         }
+        public void DestroyerGameThreadwork()
+        {
+            //从ListForGame中找已经被遗弃的实例
+        }
         public void MakeGameThreadwork()
         {
             while(true)
             {
-                if (QueueForWaiting.Count >= 2)
+                if (QueueForPlayer.Count >= 2)
                 {
-                    Player p1 = QueueForWaiting.Dequeue();
-                    Player p2 = QueueForWaiting.Dequeue();
+                    Player p1 = QueueForPlayer.Dequeue();
+                    Player p2 = QueueForPlayer.Dequeue();
                     p1.Writer("GameBegin");
                     p2.Writer("GameBegin");
                     Game game = new Game(p1, p2);
-                    QueueForPlaying.Enqueue(game);
+                    ListForGame.Add(game);
                 }
             }
         }
@@ -68,12 +75,13 @@ namespace GobangServer
             {
                 TcpClient newclient = TcpListener.AcceptTcpClient();
                 Player player = new Player(newclient);
-                QueueForWaiting.Enqueue(player);
+                QueueForPlayer.Enqueue(player);
             }
         }
     }
     public class Game
     {
+        public bool is_playing = true;
         public Player red = null;
         public Player black = null;
         public Thread TalkerThread = null;
@@ -89,15 +97,41 @@ namespace GobangServer
             string content;
             while (true)
             {
-                while (red.MessageBox.Count != 0)
+                if (red.is_connect)
                 {
-                    content = red.MessageBox.Dequeue();
-                    black.Writer(content);
+                    while (red.MessageBox.Count != 0)
+                    {
+                        content = red.MessageBox.Dequeue();
+                        black.Writer(content);
+                    }
                 }
-                while (black.MessageBox.Count != 0)
+                else
                 {
-                    content = black.MessageBox.Dequeue();
-                    red.Writer(content);
+                    if (black.is_connect)
+                    {
+                        black.Writer("您的对手已经离开，请重新等待对局");
+                        TcpHelperServer.QueueForPlayer.Enqueue(black);
+                    }
+                    is_playing = false;
+                    TalkerThread.Abort();
+                }
+                if (black.is_connect)
+                {
+                    while (black.MessageBox.Count != 0)
+                    {
+                        content = black.MessageBox.Dequeue();
+                        red.Writer(content);
+                    }
+                } 
+                else
+                {
+                    if(red.is_connect)
+                    {
+                        red.Writer("您的对手已经离开，请重新等待对局");
+                        TcpHelperServer.QueueForPlayer.Enqueue(red);
+                    }
+                    is_playing = false;
+                    TalkerThread.Abort();
                 }
             }
         }
@@ -110,6 +144,7 @@ namespace GobangServer
         public NetworkStream TcpStream = null;
         public Queue<string> MessageBox = new Queue<string>();
         public Thread ReaderThread;
+        public bool is_connect = true;
         public Player(TcpClient tcpclient)
         {
             TcpClient = tcpclient;
@@ -121,14 +156,30 @@ namespace GobangServer
         }
         public void Writer(string message)
         {
-            sw.WriteLine(message);
-            sw.Flush();
+            if (TcpClient.Connected)
+            {
+                sw.WriteLine(message);
+                sw.Flush();
+            }
+            else
+            {
+                is_connect = false;
+                ReaderThread.Abort();
+            }
         }
         public void ReadtoBoxThreadwork()
         {
             while (true)
             {
-                MessageBox.Enqueue(sr.ReadLine());
+                try
+                {
+                    MessageBox.Enqueue(sr.ReadLine());
+                }
+                catch
+                {
+                    is_connect = false;
+                    ReaderThread.Abort();
+                }
             }
         }
     }
