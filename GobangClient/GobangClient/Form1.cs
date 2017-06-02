@@ -17,7 +17,8 @@ namespace GobangClient
 {
     public partial class Form1 : Form
     {
-        public static TcpHelperClient thc = new TcpHelperClient();
+        
+        public static TcpHelperClient thc;
         public Form1()
         {
             InitializeComponent();
@@ -25,13 +26,60 @@ namespace GobangClient
 
         private void btnConnect_Click(object sender, EventArgs e)
         {
-            TcpHelperClient ths = new TcpHelperClient();
-            int i = 3;
-            while (i > 0)
+            thc = new TcpHelperClient();
+            ControlHander.Init(rtxtRoom, rtxtState);
+
+        }
+
+        private void btnSend_Click(object sender, EventArgs e)
+        {
+            string[] messages = rtxtInput.Lines;
+            rtxtInput.Clear();
+            for (int i = 0; i < messages.Length; i++)
             {
-                ths.Writer(i.ToString());
-                rtxtState.Text += "client" + ths.Reader();
-                i--;
+                thc.Writer(messages[i]);
+            }
+        }
+    }
+    public class ControlHander
+    {
+        public static RichTextBox rtxtRoom = null;
+        public static RichTextBox rtxtState = null;
+        public delegate void SetRichBoxCallBack(string content);
+        public static SetRichBoxCallBack setroom;
+        public static SetRichBoxCallBack setstate;
+        public static void Init(RichTextBox richtxtRoom,RichTextBox richtxtState)
+        {
+            rtxtRoom = richtxtRoom;
+            rtxtState = richtxtState;
+            setroom = content => rtxtRoom.AppendText("\r\n" + content);
+            setstate = content => rtxtState.AppendText("\r\n" + content);
+        }
+        public static void RoomWriter(string content)
+        {
+            rtxtRoom.AppendText("\r\n" + content);
+        }
+        public static void StateWriter(string content)
+        {
+            rtxtState.AppendText("\r\n" + content);
+        }
+        /// <summary>
+        /// 在控件中利用委派写入数据
+        /// </summary>
+        /// <param name="code">1表示rtxtRoom，2表示rtxtState</param>
+        /// <param name="content"></param>
+        public static void Write(int code,string content)
+        {
+            switch (code)
+            {
+                case 1:
+                    rtxtRoom.Invoke(setroom, content);
+                    break;
+                case 2:
+                    rtxtState.Invoke(setstate, content);
+                    break;
+                default:
+                    break;
             }
         }
     }
@@ -43,6 +91,7 @@ namespace GobangClient
         private static IPEndPoint ServerIPEndPoint = new IPEndPoint(ServerIPAddress, ServerPort);
         private TcpClient tcpclient = null;
         private NetworkStream tcpstream = null;
+        public Thread ReaderThread = null;
         private StreamReader sr = null;
         private StreamWriter sw = null;
 
@@ -53,6 +102,17 @@ namespace GobangClient
             tcpstream = tcpclient.GetStream();
             sr = new StreamReader(tcpstream);
             sw = new StreamWriter(tcpstream);
+            ReaderThread = new Thread(new ThreadStart(ReaderThreadwork));
+            ReaderThread.Start();
+        }
+        public void ReaderThreadwork()
+        {
+            string message;
+            while (true)
+            {
+                message = Reader();
+                ControlHander.Write(1, message);
+            }
         }
         public void Writer(string message)
         {

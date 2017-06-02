@@ -33,11 +33,13 @@
             this.label1 = new System.Windows.Forms.Label();
             this.rtxtState = new System.Windows.Forms.RichTextBox();
             this.rtxtRoom = new System.Windows.Forms.RichTextBox();
+            this.rtxtInput = new System.Windows.Forms.RichTextBox();
+            this.btnSend = new System.Windows.Forms.Button();
             this.SuspendLayout();
             // 
             // btnConnect
             // 
-            this.btnConnect.Location = new System.Drawing.Point(241, 165);
+            this.btnConnect.Location = new System.Drawing.Point(177, 83);
             this.btnConnect.Name = "btnConnect";
             this.btnConnect.Size = new System.Drawing.Size(75, 23);
             this.btnConnect.TabIndex = 0;
@@ -47,7 +49,7 @@
             // 
             // textBox1
             // 
-            this.textBox1.Location = new System.Drawing.Point(227, 125);
+            this.textBox1.Location = new System.Drawing.Point(177, 37);
             this.textBox1.Name = "textBox1";
             this.textBox1.Size = new System.Drawing.Size(127, 25);
             this.textBox1.TabIndex = 1;
@@ -55,7 +57,7 @@
             // label1
             // 
             this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(176, 128);
+            this.label1.Location = new System.Drawing.Point(126, 40);
             this.label1.Name = "label1";
             this.label1.Size = new System.Drawing.Size(45, 15);
             this.label1.TabIndex = 2;
@@ -63,7 +65,7 @@
             // 
             // rtxtState
             // 
-            this.rtxtState.Location = new System.Drawing.Point(105, 206);
+            this.rtxtState.Location = new System.Drawing.Point(107, 285);
             this.rtxtState.Name = "rtxtState";
             this.rtxtState.Size = new System.Drawing.Size(197, 156);
             this.rtxtState.TabIndex = 3;
@@ -71,17 +73,38 @@
             // 
             // rtxtRoom
             // 
-            this.rtxtRoom.Location = new System.Drawing.Point(381, 195);
+            this.rtxtRoom.Location = new System.Drawing.Point(338, 285);
             this.rtxtRoom.Name = "rtxtRoom";
-            this.rtxtRoom.Size = new System.Drawing.Size(100, 96);
+            this.rtxtRoom.ReadOnly = true;
+            this.rtxtRoom.Size = new System.Drawing.Size(210, 156);
             this.rtxtRoom.TabIndex = 4;
             this.rtxtRoom.Text = "";
+            // 
+            // rtxtInput
+            // 
+            this.rtxtInput.Location = new System.Drawing.Point(107, 152);
+            this.rtxtInput.Name = "rtxtInput";
+            this.rtxtInput.Size = new System.Drawing.Size(198, 96);
+            this.rtxtInput.TabIndex = 5;
+            this.rtxtInput.Text = "";
+            // 
+            // btnSend
+            // 
+            this.btnSend.Location = new System.Drawing.Point(373, 180);
+            this.btnSend.Name = "btnSend";
+            this.btnSend.Size = new System.Drawing.Size(75, 23);
+            this.btnSend.TabIndex = 6;
+            this.btnSend.Text = "发送";
+            this.btnSend.UseVisualStyleBackColor = true;
+            this.btnSend.Click += new System.EventHandler(this.btnSend_Click);
             // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 15F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(583, 484);
+            this.Controls.Add(this.btnSend);
+            this.Controls.Add(this.rtxtInput);
             this.Controls.Add(this.rtxtRoom);
             this.Controls.Add(this.rtxtState);
             this.Controls.Add(this.label1);
@@ -101,6 +124,8 @@
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.RichTextBox rtxtState;
         private System.Windows.Forms.RichTextBox rtxtRoom;
+        private System.Windows.Forms.RichTextBox rtxtInput;
+        private System.Windows.Forms.Button btnSend;
     }
 }
 

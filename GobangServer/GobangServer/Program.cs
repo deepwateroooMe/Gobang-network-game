@@ -24,11 +24,16 @@ namespace GobangServer
             {
                 foreach(Player p in TcpHelperServer.QueueForPlayer)
                 {
-                    p.Writer(200.ToString());
+                    p.Writer("199");
                 }
                 Console.ReadLine();
             }
         }
+    }
+    public class Counter
+    {
+        public static int TotalPlayer = 0;
+        public static int TotalGame = 0;
     }
     public class TcpHelperServer
     {
@@ -62,10 +67,12 @@ namespace GobangServer
                 {
                     Player p1 = QueueForPlayer.Dequeue();
                     Player p2 = QueueForPlayer.Dequeue();
-                    p1.Writer("GameBegin");
-                    p2.Writer("GameBegin");
+                    p1.Writer("201");
+                    p2.Writer("201");
                     Game game = new Game(p1, p2);
                     ListForGame.Add(game);
+                    Counter.TotalGame++;
+                    Console.WriteLine("当前对局数：" + Counter.TotalGame);
                 }
             }
         }
@@ -76,6 +83,9 @@ namespace GobangServer
                 TcpClient newclient = TcpListener.AcceptTcpClient();
                 Player player = new Player(newclient);
                 QueueForPlayer.Enqueue(player);
+                player.Writer("200");
+                Counter.TotalPlayer++;
+                Console.WriteLine("在线人数：" + Counter.TotalPlayer);
             }
         }
     }
@@ -109,10 +119,12 @@ namespace GobangServer
                 {
                     if (black.is_connect)
                     {
-                        black.Writer("您的对手已经离开，请重新等待对局");
+                        black.Writer("404");
                         TcpHelperServer.QueueForPlayer.Enqueue(black);
                     }
                     is_playing = false;
+                    Counter.TotalGame--;
+                    Console.WriteLine("当前对局数：" + Counter.TotalGame);
                     TalkerThread.Abort();
                 }
                 if (black.is_connect)
@@ -127,10 +139,12 @@ namespace GobangServer
                 {
                     if(red.is_connect)
                     {
-                        red.Writer("您的对手已经离开，请重新等待对局");
+                        red.Writer("404");
                         TcpHelperServer.QueueForPlayer.Enqueue(red);
                     }
                     is_playing = false;
+                    Counter.TotalGame--;
+                    Console.WriteLine("当前对局数：" + Counter.TotalGame);
                     TalkerThread.Abort();
                 }
             }
@@ -163,6 +177,11 @@ namespace GobangServer
             }
             else
             {
+                if (is_connect) 
+                {
+                    Counter.TotalPlayer--;
+                    Console.WriteLine(Counter.TotalPlayer);
+                }
                 is_connect = false;
                 ReaderThread.Abort();
             }
@@ -177,6 +196,11 @@ namespace GobangServer
                 }
                 catch
                 {
+                    if (is_connect)
+                    {
+                        Counter.TotalPlayer--;
+                        Console.WriteLine("在线人数：" + Counter.TotalPlayer);
+                    }
                     is_connect = false;
                     ReaderThread.Abort();
                 }
