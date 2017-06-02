@@ -77,3 +77,18 @@
 >setroom = message => rtxtRoom.AppendText("\r\n" + message);
 >setstate = message => rtxtState.AppendText("\r\n" + message);
 >```
+>   * 重构了代码
+>       * 增加了LoginForm窗体
+>       * 把封装好的类放到了单独的文件中
+>       * 用如下代码保证了TcpHelperServer类只有唯一的一个实例
+>```c#
+>public class TcpHelperClient
+>{
+>   public static TcpHelperClient main = new TcpHelperClient();
+>   private TcpHelperClient()
+>   {
+>       //感谢设计模式之禅，真的是好书
+>   }
+}
+>}
+>```

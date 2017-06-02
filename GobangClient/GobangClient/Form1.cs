@@ -40,6 +40,16 @@ namespace GobangClient
                 thc.Writer(messages[i]);
             }
         }
+
+        private void textBox1_TextChanged(object sender, EventArgs e)
+        {
+
+        }
+
+        private void label1_Click(object sender, EventArgs e)
+        {
+
+        }
     }
     public class ControlHander
     {
@@ -52,16 +62,8 @@ namespace GobangClient
         {
             rtxtRoom = richtxtRoom;
             rtxtState = richtxtState;
-            setroom = content => rtxtRoom.AppendText("\r\n" + content);
-            setstate = content => rtxtState.AppendText("\r\n" + content);
-        }
-        public static void RoomWriter(string content)
-        {
-            rtxtRoom.AppendText("\r\n" + content);
-        }
-        public static void StateWriter(string content)
-        {
-            rtxtState.AppendText("\r\n" + content);
+            setroom = message => rtxtRoom.AppendText("\r\n" + message);
+            setstate = message => rtxtState.AppendText("\r\n" + message);
         }
         /// <summary>
         /// 在控件中利用委派写入数据
