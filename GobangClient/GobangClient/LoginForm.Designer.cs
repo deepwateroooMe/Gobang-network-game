@@ -29,7 +29,7 @@
         private void InitializeComponent()
         {
             this.label1 = new System.Windows.Forms.Label();
-            this.textBox1 = new System.Windows.Forms.TextBox();
+            this.txtNickName = new System.Windows.Forms.TextBox();
             this.btnConnect = new System.Windows.Forms.Button();
             this.SuspendLayout();
             // 
@@ -43,13 +43,13 @@
             this.label1.Text = "昵称:";
             this.label1.Click += new System.EventHandler(this.label1_Click);
             // 
-            // textBox1
+            // txtNickName
             // 
-            this.textBox1.Location = new System.Drawing.Point(94, 63);
-            this.textBox1.Name = "textBox1";
-            this.textBox1.Size = new System.Drawing.Size(127, 25);
-            this.textBox1.TabIndex = 4;
-            this.textBox1.TextChanged += new System.EventHandler(this.textBox1_TextChanged);
+            this.txtNickName.Location = new System.Drawing.Point(94, 63);
+            this.txtNickName.Name = "txtNickName";
+            this.txtNickName.Size = new System.Drawing.Size(127, 25);
+            this.txtNickName.TabIndex = 4;
+            this.txtNickName.TextChanged += new System.EventHandler(this.textBox1_TextChanged);
             // 
             // btnConnect
             // 
@@ -65,9 +65,9 @@
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 15F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(282, 255);
+            this.ClientSize = new System.Drawing.Size(282, 177);
             this.Controls.Add(this.label1);
-            this.Controls.Add(this.textBox1);
+            this.Controls.Add(this.txtNickName);
             this.Controls.Add(this.btnConnect);
             this.Name = "LoginForm";
             this.Text = "LoginForm";
@@ -79,7 +79,7 @@
         #endregion
 
         private System.Windows.Forms.Label label1;
-        private System.Windows.Forms.TextBox textBox1;
+        private System.Windows.Forms.TextBox txtNickName;
         private System.Windows.Forms.Button btnConnect;
     }
 }
