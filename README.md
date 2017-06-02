@@ -72,4 +72,8 @@
 >   * 在建立，销毁Player，Game实例时对应的，会维护Counter结构
 >* 客户端
 >   * 封装了ControlHander类用来实例化委托与跨线程调用控件
->   * 实例化委托时用了一个Lambda表达式，很开心
+>   * 实例化委托时用到了Lambda表达式，很开心
+>```c#
+>setroom = message => rtxtRoom.AppendText("\r\n" + message);
+>setstate = message => rtxtState.AppendText("\r\n" + message);
+>```
