@@ -53,7 +53,8 @@ namespace GobangClient
                 else
                 {
                     index = Regex.Match(message, ":").Index + 1;
-                    message = message.Substring(0, index) + "[" + DateTime.Now.ToString("HH:mm:ss") + "]\r\n" + message.Substring(index);
+                    //因为第一位是服务器加上的"!"
+                    message = message.Substring(1, index - 1) + "[" + DateTime.Now.ToString("HH:mm:ss") + "]\r\n" + message.Substring(index);
                     ControlHander.Write(1, message);
                 }
             }

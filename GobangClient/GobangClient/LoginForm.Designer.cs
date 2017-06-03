@@ -41,7 +41,6 @@
             this.label1.Size = new System.Drawing.Size(45, 15);
             this.label1.TabIndex = 5;
             this.label1.Text = "昵称:";
-            this.label1.Click += new System.EventHandler(this.label1_Click);
             // 
             // txtNickName
             // 
@@ -49,7 +48,7 @@
             this.txtNickName.Name = "txtNickName";
             this.txtNickName.Size = new System.Drawing.Size(127, 25);
             this.txtNickName.TabIndex = 4;
-            this.txtNickName.TextChanged += new System.EventHandler(this.textBox1_TextChanged);
+            this.txtNickName.KeyDown += new System.Windows.Forms.KeyEventHandler(this.txtNickName_KeyDown);
             // 
             // btnConnect
             // 

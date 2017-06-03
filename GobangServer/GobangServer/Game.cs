@@ -37,7 +37,7 @@ namespace GobangServer
                     while (red.MessageBox.Count != 0)
                     {
                         content = red.MessageBox.Dequeue();
-                        black.Writer(red.NickName + ":" + content);
+                        black.Writer("!" + red.NickName + ":" + content);
                     }
                 }
                 else
@@ -57,7 +57,7 @@ namespace GobangServer
                     while (black.MessageBox.Count != 0)
                     {
                         content = black.MessageBox.Dequeue();
-                        red.Writer(black.NickName + ":" + content);
+                        red.Writer("!" + black.NickName + ":" + content);
                     }
                 }
                 else

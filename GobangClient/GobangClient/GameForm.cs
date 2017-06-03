@@ -25,11 +25,6 @@ namespace GobangClient
             thc = TcpHelperClient.main;
             thc.ThreadWakeUp();
         }
-
-        private void btnConnect_Click(object sender, EventArgs e)
-        {
-        }
-
         private void btnSend_Click(object sender, EventArgs e)
         {
             string[] messages = rtxtInput.Lines;string now;
@@ -43,12 +38,7 @@ namespace GobangClient
             }
         }
 
-        private void textBox1_TextChanged(object sender, EventArgs e)
-        {
-
-        }
-        
-        private void label1_Click(object sender, EventArgs e)
+        private void pbChessBoard_MouseClick(object sender, MouseEventArgs e)
         {
 
         }
