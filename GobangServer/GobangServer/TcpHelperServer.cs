@@ -46,8 +46,8 @@ namespace GobangServer
                 {
                     Player p1 = QueueForPlayer.Dequeue();
                     Player p2 = QueueForPlayer.Dequeue();
-                    p1.Writer("$$201");
-                    p2.Writer("$$201");
+                    p1.Writer(CodeNum.have_playing);
+                    p2.Writer(CodeNum.have_playing);
                     Game game = new Game(p1, p2);
                     ListForGame.Add(game);
                     Counter.TotalGame++;
@@ -62,7 +62,7 @@ namespace GobangServer
                 TcpClient newclient = TcpListener.AcceptTcpClient();
                 Player player = new Player(newclient);
                 QueueForPlayer.Enqueue(player);
-                player.Writer("$$200");
+                player.Writer(CodeNum.have_connect);
                 Counter.TotalPlayer++;
                 Console.WriteLine("在线人数：" + Counter.TotalPlayer);
             }

@@ -26,7 +26,10 @@ namespace GobangServer
             black = p2;
             TalkerThread = new Thread(new ThreadStart(TalkThreadwork));
             TalkerThread.Start();
+            red.Writer(CodeNum.usewhitepiece);
+            black.Writer(CodeNum.useblackpiece);
         }
+        //还有这坨屎也是，谢谢
         public void TalkThreadwork()
         {
             string content;
@@ -37,14 +40,19 @@ namespace GobangServer
                     while (red.MessageBox.Count != 0)
                     {
                         content = red.MessageBox.Dequeue();
-                        black.Writer("!" + red.NickName + ":" + content);
+                        if (CodeNum.IsCodeNum205(content))
+                        {
+                            black.Writer(content);
+                        }
+                        else
+                            black.Writer("!" + red.NickName + ":" + content);
                     }
                 }
                 else
                 {
                     if (black.is_connect)
                     {
-                        black.Writer("$$404");
+                        black.Writer(CodeNum.miss_connect);
                         TcpHelperServer.QueueForPlayer.Enqueue(black);
                     }
                     is_playing = false;
@@ -57,14 +65,19 @@ namespace GobangServer
                     while (black.MessageBox.Count != 0)
                     {
                         content = black.MessageBox.Dequeue();
-                        red.Writer("!" + black.NickName + ":" + content);
+                        if (CodeNum.IsCodeNum205(content))
+                        {
+                            red.Writer(content);
+                        }
+                        else
+                            red.Writer("!" + black.NickName + ":" + content);
                     }
                 }
                 else
                 {
                     if (red.is_connect)
                     {
-                        red.Writer("$$404");
+                        red.Writer(CodeNum.miss_connect);
                         TcpHelperServer.QueueForPlayer.Enqueue(red);
                     }
                     is_playing = false;

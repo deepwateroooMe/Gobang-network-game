@@ -24,7 +24,7 @@ namespace GobangServer
             {
                 foreach(Player p in TcpHelperServer.QueueForPlayer)
                 {
-                    p.Writer("$$199");
+                    p.Writer(CodeNum.broadcast);
                 }
                 Console.ReadLine();
             }

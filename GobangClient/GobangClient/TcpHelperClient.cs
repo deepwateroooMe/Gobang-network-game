@@ -43,21 +43,63 @@ namespace GobangClient
         }
         public void ReaderThreadwork()
         {
-            int index;
-            Regex is_sysmessage = new Regex("^\\$\\$\\d+$");
             string message;
             while (true)
             {
                 message = Reader();
-                if (is_sysmessage.IsMatch(message)) ;
+                if (CodeNum.Is_CodeNum(message))
+                {
+                    HandleCodeNum(message);
+                }
                 else
                 {
-                    index = Regex.Match(message, ":").Index + 1;
                     //因为第一位是服务器加上的"!"
-                    message = message.Substring(1, index - 1) + "[" + DateTime.Now.ToString("HH:mm:ss") + "]\r\n" + message.Substring(index);
+                    message = RenderStringFromServer(message);
                     ControlHander.Write(1, message);
                 }
             }
+        }
+        private void HandleCodeNum(string code)
+        {
+            switch (code)
+            {
+                case CodeNum.broadcast:
+                    ControlHander.Write(2, "南行五子棋祝你身体健康！");
+                    break;
+                case CodeNum.have_connect:
+                    ControlHander.Write(2, "成功与服务器连接，正在等待对局...");
+                    break;
+                case CodeNum.have_playing:
+                    ControlHander.Write(2, "对局开始！");
+                    break;
+                case CodeNum.useblackpiece:
+                    ControlHander.Write(2, "您执黑先行");
+                    Printer.GameBegin(Printer.Black);
+                    break;
+                case CodeNum.usewhitepiece:
+                    ControlHander.Write(2, "您执白后行");
+                    Printer.GameBegin(Printer.White);
+                    break;
+                case CodeNum.miss_connect:
+                    ControlHander.Write(2, "对手掉线，请等待下一场对局");
+                    Printer.is_playing = false;
+                    break;
+                case CodeNum.time_to_play:
+                    ControlHander.Write(2, "现在轮到您行子");
+                    Printer.is_turn_to_play = true;
+                    break;
+                default:
+                    break;
+            }
+            if (CodeNum.IsCodeNum205(code))
+            {
+                Printer.main.Print(CodeNum.HandleCodeNum205(code), Printer.othercolor);
+            }
+        }
+        private string RenderStringFromServer(string input)
+        {
+            int index = Regex.Match(input, ":").Index + 1;
+            return input.Substring(1, index - 1) + "[" + DateTime.Now.ToString("HH:mm:ss") + "]\r\n" + input.Substring(index);
         }
         public void Writer(string message)
         {

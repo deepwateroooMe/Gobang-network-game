@@ -95,6 +95,7 @@
             this.Controls.Add(this.rtxtState);
             this.Name = "GameForm";
             this.Text = "Game";
+            this.Load += new System.EventHandler(this.GameForm_Load);
             ((System.ComponentModel.ISupportInitialize)(this.pbChessBoard)).EndInit();
             this.ResumeLayout(false);
 
