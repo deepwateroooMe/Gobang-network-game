@@ -38,5 +38,10 @@ namespace GobangClient
             thc = TcpHelperClient.main;
             thc.ThreadWakeUp();
         }
+
+        private void GameForm_FormClosed(object sender, FormClosedEventArgs e)
+        {
+            Application.Exit();
+        }
     }
 }
