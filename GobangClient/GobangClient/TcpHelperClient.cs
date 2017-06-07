@@ -9,7 +9,7 @@ namespace GobangClient
 {
     public class TcpHelperClient
     {
-        private static string ServerAddress = "127.0.0.1";
+        private static string ServerAddress = "119.23.56.207";
         private static int ServerPort = 9961;
         private static IPAddress ServerIPAddress = IPAddress.Parse(ServerAddress);
         private static IPEndPoint ServerIPEndPoint = new IPEndPoint(ServerIPAddress, ServerPort);
@@ -66,26 +66,36 @@ namespace GobangClient
                     break;
                 case CodeNum.useblackpiece:
                     ControlHander.Write(2, "您执黑先行");
-                    Printer.GameBegin(Printer.Black);
+                    GameBoard.GameBegin(GameBoard.Black);
                     break;
                 case CodeNum.usewhitepiece:
                     ControlHander.Write(2, "您执白后行");
-                    Printer.GameBegin(Printer.White);
+                    GameBoard.GameBegin(GameBoard.White);
                     break;
                 case CodeNum.miss_connect:
                     ControlHander.Write(2, "对手掉线，请等待下一场对局");
-                    Printer.is_playing = false;
+                    GameBoard.is_playing = false;
                     break;
                 case CodeNum.time_to_play:
                     ControlHander.Write(2, "现在轮到您行子");
-                    Printer.is_turn_to_play = true;
+                    GameBoard.is_turn_to_play = true;
+                    break;
+                case CodeNum.you_are_loster:
+                    ControlHander.Write(2, "你输了");
+                    GameBoard.is_playing = false;
+                    GameBoard.is_turn_to_play = false;
+                    break;
+                case CodeNum.you_are_winner:
+                    ControlHander.Write(2, "你赢了");
+                    GameBoard.is_playing = false;
+                    GameBoard.is_turn_to_play = false;
                     break;
                 default:
                     break;
             }
             if (CodeNum.IsCodeNum205(code))
             {
-                Printer.main.Print(CodeNum.HandleCodeNum205(code), Printer.othercolor);
+                GameBoard.main.Print(CodeNum.HandleCodeNum205(code), GameBoard.othercolor);
             }
         }
         private string RenderStringFromServer(string input)

@@ -4,7 +4,7 @@ using System.Drawing;
 
 namespace GobangClient
 {
-    class Printer
+    class GameBoard
     {
         public const string White = "White";
         public const string Black = "Black";
@@ -12,7 +12,7 @@ namespace GobangClient
         public static bool is_turn_to_play = true;
         public static string mycolor = "";
         public static string othercolor = "";
-        public static Printer main = new Printer();
+        public static GameBoard main = new GameBoard();
         private string whitepath = @"C:\Users\Administrator\Desktop\Gobang-network-game\Images\White.png";
         private string blackpath = @"C:\Users\Administrator\Desktop\Gobang-network-game\Images\Black.png";
         private string chessboardpath = @"C:\Users\Administrator\Desktop\Gobang-network-game\Images\ChessBoard.jpg";
@@ -46,7 +46,7 @@ namespace GobangClient
             pbchessboard = pb;
             pb.Image = bitmapchessboard;
         }
-        private Printer()
+        private GameBoard()
         {
             whitestream = new FileStream(whitepath, FileMode.Open, FileAccess.Read);
             blackstream = new FileStream(blackpath, FileMode.Open, FileAccess.Read);
@@ -75,9 +75,9 @@ namespace GobangClient
             {
                 if (is_turn_to_play)
                 {
-                    TcpHelperClient.main.Writer(CodeNum.CreatCodeNum205(mousex, mousey));
                     mousex = get_index(mousex);
                     mousey = get_index(mousey);
+                    TcpHelperClient.main.Writer(CodeNum.CreatCodeNum205(mousex, mousey));
                     chessboard.DrawImage(Image.FromStream(nowpiece),
                         new Rectangle(new Point(23 + mousex * 35 - 10, 23 + mousey * 35 - 10),
                         new Size(20, 20)));
@@ -87,8 +87,6 @@ namespace GobangClient
             }
             else
             {
-                mousex = get_index(mousex);
-                mousey = get_index(mousey);
                 chessboard.DrawImage(Image.FromStream(nowpiece),
                     new Rectangle(new Point(23 + mousex * 35 - 10, 23 + mousey * 35 - 10),
                     new Size(20, 20)));

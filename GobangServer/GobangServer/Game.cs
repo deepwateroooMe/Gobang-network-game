@@ -6,16 +6,17 @@ namespace GobangServer
     public class Game
     {
         public bool is_playing = true;
-        public Player red = null;
+        public Player white = null;
         public Player black = null;
         public Thread TalkerThread = null;
+        public GameManual gamemanual = new GameManual();
         public Game(Player p1, Player p2)
         {
-            red = p1;
+            white = p1;
             black = p2;
             TalkerThread = new Thread(new ThreadStart(TalkThreadwork));
             TalkerThread.Start();
-            red.Writer(CodeNum.usewhitepiece);
+            white.Writer(CodeNum.usewhitepiece);
             black.Writer(CodeNum.useblackpiece);
         }
         //还有这坨屎也是，谢谢
@@ -24,17 +25,25 @@ namespace GobangServer
             string content;
             while (true)
             {
-                if (red.is_connect)
+                if (white.is_connect)
                 {
-                    while (red.MessageBox.Count != 0)
+                    while (white.MessageBox.Count != 0)
                     {
-                        content = red.MessageBox.Dequeue();
+                        content = white.MessageBox.Dequeue();
                         if (CodeNum.IsCodeNum205(content))
                         {
+                            gamemanual.PlayChess(content, GameManual.whitepiece);
                             black.Writer(content);
+                            if (gamemanual.have_result == GameManual.whitewin)
+                            {
+                                black.Writer(CodeNum.you_are_loster);
+                                white.Writer(CodeNum.you_are_winner);
+                                is_playing = false;
+                                TalkerThread.Abort();
+                            }
                         }
                         else
-                            black.Writer("!" + red.NickName + ":" + content);
+                            black.Writer("!" + white.NickName + ":" + content);
                     }
                 }
                 else
@@ -56,18 +65,26 @@ namespace GobangServer
                         content = black.MessageBox.Dequeue();
                         if (CodeNum.IsCodeNum205(content))
                         {
-                            red.Writer(content);
+                            gamemanual.PlayChess(content, GameManual.blackpiece);
+                            white.Writer(content);
+                            if (gamemanual.have_result == GameManual.blackwin)
+                            {
+                                white.Writer(CodeNum.you_are_loster);
+                                black.Writer(CodeNum.you_are_winner);
+                                is_playing = false;
+                                TalkerThread.Abort();
+                            }
                         }
                         else
-                            red.Writer("!" + black.NickName + ":" + content);
+                            white.Writer("!" + black.NickName + ":" + content);
                     }
                 }
                 else
                 {
-                    if (red.is_connect)
+                    if (white.is_connect)
                     {
-                        red.Writer(CodeNum.miss_connect);
-                        TcpHelperServer.QueueForPlayer.Enqueue(red);
+                        white.Writer(CodeNum.miss_connect);
+                        TcpHelperServer.QueueForPlayer.Enqueue(white);
                     }
                     is_playing = false;
                     Counter.TotalGame--;

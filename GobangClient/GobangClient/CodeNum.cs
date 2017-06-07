@@ -13,6 +13,8 @@ namespace GobangClient
         public const string useblackpiece = "$203";
         public const string time_to_play = "$204";
         public const string miss_connect = "$404";
+        public const string you_are_winner = "$206";
+        public const string you_are_loster = "$207";
         public static bool Is_CodeNum(string input)
         {
             Regex regex = new Regex("^\\$\\d+");
