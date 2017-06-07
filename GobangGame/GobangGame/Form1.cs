@@ -16,7 +16,7 @@ namespace GobangGame
         public Form1()
         {
             InitializeComponent();
-            Printer.main.Init(ChessBoard);
+            GameBoard.main.Init(ChessBoard);
         }
 
         private void ChessBoard_Click(object sender, EventArgs e)
@@ -25,12 +25,13 @@ namespace GobangGame
 
         private void ChessBoard_MouseClick(object sender, MouseEventArgs e)
         {
-            Printer.main.Print(e);
+            GameBoard.main.Print(e);
         }
     }
-    class Printer
+    class GameBoard
     {
-        public static Printer main = new Printer();
+
+        public static GameBoard main = new GameBoard();
         private string whitepath = @"C:\Users\Administrator\Desktop\Gobang-network-game\Images\White.png";
         private string blackpath = @"C:\Users\Administrator\Desktop\Gobang-network-game\Images\Black.png";
         private string chessboardpath = @"C:\Users\Administrator\Desktop\Gobang-network-game\Images\ChessBoard.jpg";
@@ -49,7 +50,7 @@ namespace GobangGame
             pbchessboard = pb;
             pb.Image = bitmapchessboard;
         }
-        private Printer()
+        private GameBoard()
         {
             whitestream = new FileStream(whitepath, FileMode.Open, FileAccess.Read);
             blackstream = new FileStream(blackpath, FileMode.Open, FileAccess.Read);
