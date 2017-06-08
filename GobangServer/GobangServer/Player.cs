@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Threading;
 using System.IO;
 using System.Net.Sockets;
+using GobangClassLibrary;
 
 namespace GobangServer
 {

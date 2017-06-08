@@ -2,7 +2,8 @@
 using System.Text.RegularExpressions;
 using System.Drawing;
 
-namespace GobangClient
+
+namespace GobangClassLibrary
 {
     public class CodeNum
     {
@@ -20,9 +21,9 @@ namespace GobangClient
             Regex regex = new Regex("^\\$\\d+");
             return regex.IsMatch(input);
         }
-        public static string CreatCodeNum205(int x,int y)
+        public static string CreatCodeNum205(int indexx, int indexy)
         {
-            return "$205:" + x + "," + y;
+            return "$205:" + indexx + "," + indexy;
         }
         public static bool IsCodeNum205(string input)
         {

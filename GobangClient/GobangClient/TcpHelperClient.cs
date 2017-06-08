@@ -4,12 +4,13 @@ using System.Threading;
 using System.IO;
 using System.Net;
 using System.Net.Sockets;
+using GobangClassLibrary;
 
 namespace GobangClient
 {
     public class TcpHelperClient
     {
-        private static string ServerAddress = "119.23.56.207";
+        private static string ServerAddress = "127.0.0.1";
         private static int ServerPort = 9961;
         private static IPAddress ServerIPAddress = IPAddress.Parse(ServerAddress);
         private static IPEndPoint ServerIPEndPoint = new IPEndPoint(ServerIPAddress, ServerPort);

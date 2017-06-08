@@ -33,6 +33,9 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="GobangClassLibrary">
+      <HintPath>..\..\GobangClassLibrary\GobangClassLibrary\bin\Debug\GobangClassLibrary.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Xml.Linq" />
@@ -46,7 +49,6 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="CodeNum.cs" />
     <Compile Include="ControlHander.cs" />
     <Compile Include="GameForm.cs">
       <SubType>Form</SubType>

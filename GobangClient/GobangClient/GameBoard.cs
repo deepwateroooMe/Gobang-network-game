@@ -1,6 +1,7 @@
 ﻿using System.IO;
 using System.Windows.Forms;
 using System.Drawing;
+using GobangClassLibrary;
 
 namespace GobangClient
 {

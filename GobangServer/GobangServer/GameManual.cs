@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using GobangClassLibrary;
+using System.Drawing;
 
 namespace GobangServer
 {
@@ -27,7 +29,7 @@ namespace GobangServer
         public void PlayChess(string codenum205, int whiteorblack)
         {
             Point point = CodeNum.HandleCodeNum205(codenum205);
-            PlayChess(point.x, point.y, whiteorblack);
+            PlayChess(point.X, point.Y, whiteorblack);
         }
         private bool Is_Win(int indexx, int indexy, int whiteorblack)
         {

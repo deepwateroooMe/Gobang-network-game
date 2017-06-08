@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Threading;
+using GobangClassLibrary;
 
 namespace GobangServer
 {
@@ -19,7 +20,6 @@ namespace GobangServer
             white.Writer(CodeNum.usewhitepiece);
             black.Writer(CodeNum.useblackpiece);
         }
-        //还有这坨屎也是，谢谢
         public void TalkThreadwork()
         {
             string content;
@@ -30,68 +30,72 @@ namespace GobangServer
                     while (white.MessageBox.Count != 0)
                     {
                         content = white.MessageBox.Dequeue();
-                        if (CodeNum.IsCodeNum205(content))
-                        {
-                            gamemanual.PlayChess(content, GameManual.whitepiece);
-                            black.Writer(content);
-                            if (gamemanual.have_result == GameManual.whitewin)
-                            {
-                                black.Writer(CodeNum.you_are_loster);
-                                white.Writer(CodeNum.you_are_winner);
-                                is_playing = false;
-                                TalkerThread.Abort();
-                            }
-                        }
-                        else
-                            black.Writer("!" + white.NickName + ":" + content);
+                        dealmessagefromplayer(white, content);
                     }
                 }
                 else
                 {
-                    if (black.is_connect)
-                    {
-                        black.Writer(CodeNum.miss_connect);
-                        TcpHelperServer.QueueForPlayer.Enqueue(black);
-                    }
-                    is_playing = false;
-                    Counter.TotalGame--;
-                    Console.WriteLine("当前对局数：" + Counter.TotalGame);
-                    TalkerThread.Abort();
+                    dealwithmisconnection(white);
                 }
                 if (black.is_connect)
                 {
                     while (black.MessageBox.Count != 0)
                     {
                         content = black.MessageBox.Dequeue();
-                        if (CodeNum.IsCodeNum205(content))
-                        {
-                            gamemanual.PlayChess(content, GameManual.blackpiece);
-                            white.Writer(content);
-                            if (gamemanual.have_result == GameManual.blackwin)
-                            {
-                                white.Writer(CodeNum.you_are_loster);
-                                black.Writer(CodeNum.you_are_winner);
-                                is_playing = false;
-                                TalkerThread.Abort();
-                            }
-                        }
-                        else
-                            white.Writer("!" + black.NickName + ":" + content);
+                        dealmessagefromplayer(black, content);
                     }
                 }
                 else
                 {
-                    if (white.is_connect)
-                    {
-                        white.Writer(CodeNum.miss_connect);
-                        TcpHelperServer.QueueForPlayer.Enqueue(white);
-                    }
-                    is_playing = false;
-                    Counter.TotalGame--;
-                    Console.WriteLine("当前对局数：" + Counter.TotalGame);
-                    TalkerThread.Abort();
+                    dealwithmisconnection(black);
                 }
             }
+        }
+        private void dealmessagefromplayer(Player whosendmessage, string message)
+        {
+            Player other = getotherplayer(whosendmessage);
+            if (CodeNum.IsCodeNum205(message))
+            {
+                dealwithcodenum205(whosendmessage, message);
+            }
+            else
+                other.Writer("!" + whosendmessage.NickName + ":" + message);
+        }
+        private void dealwithcodenum205(Player whocodefrom, string codenum205)
+        {
+            int piece = (whocodefrom == black) ? GameManual.blackpiece : GameManual.whitepiece;
+            Player other = getotherplayer(whocodefrom);
+            gamemanual.PlayChess(codenum205, piece);
+            other.Writer(codenum205);
+            if (gamemanual.have_result == piece)
+            {
+                whocodefrom.Writer(CodeNum.you_are_winner);
+                other.Writer(CodeNum.you_are_loster);
+                abortthisgame();
+                //这里在下次更新时让两方回到等待队列
+
+            }
+        }
+        private void dealwithmisconnection(Player whomisconnection)
+        {
+            Player other = getotherplayer(whomisconnection);
+            if(other.is_connect)
+            {
+                other.Writer(CodeNum.miss_connect);
+                TcpHelperServer.QueueForPlayer.Enqueue(other);
+            }
+            abortthisgame();
+        }
+        private void abortthisgame()
+        {
+            is_playing = false;
+            TalkerThread.Abort();
+            Counter.TotalGame--;
+            Console.WriteLine("当前对局数：" + Counter.TotalGame);
+        }
+        private Player getotherplayer(Player playernow)
+        {
+            return (playernow == black) ? white : black;
         }
     }
 }
