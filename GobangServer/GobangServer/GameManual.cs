@@ -10,13 +10,8 @@ namespace GobangServer
 {
     public class GameManual
     {
-        public const int whitepiece = 1;
-        public const int blackpiece = 2;
-        public const int noresult = 0;
-        public const int whitewin = 1;
-        public const int blackwin = 2;
         public int[,] ChessManual = new int[15, 15];
-        public int have_result = noresult;
+        public int have_result = CodeNum.noresult;
         public void PlayChess(int indexx, int indexy, int whiteorblack)
         {
             if (ChessManual[indexx, indexy] == 0)

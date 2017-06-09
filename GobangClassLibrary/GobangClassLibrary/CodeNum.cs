@@ -7,6 +7,9 @@ namespace GobangClassLibrary
 {
     public class CodeNum
     {
+        public const int whitepiece = 1;
+        public const int blackpiece = -1;
+        public const int noresult = 0;
         public const string broadcast = "$199";
         public const string have_connect = "$200";
         public const string have_playing = "$201";
@@ -38,6 +41,10 @@ namespace GobangClassLibrary
             int x = Convert.ToInt32(stapoint[0]);
             int y = Convert.ToInt32(stapoint[1]);
             return new Point(x, y);
+        }
+        public static int GetOtherSide(int whiteorblack)
+        {
+            return -1 * whiteorblack;
         }
     }
 }

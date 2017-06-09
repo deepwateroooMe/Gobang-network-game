@@ -11,7 +11,7 @@ namespace GobangClient
         {
             InitializeComponent();
             ControlHander.Init(rtxtRoom, rtxtState);//这个初始化方法必须放在实例化TcpHelperServer的前面，否则实例化后Reader线程启动，而初始化还没有进行，程序崩溃
-            GameBoard.main.Init(pbChessBoard);
+            Game.Init(pbChessBoard);
         }
         private void btnSend_Click(object sender, EventArgs e)
         {
@@ -28,9 +28,9 @@ namespace GobangClient
 
         private void pbChessBoard_MouseClick(object sender, MouseEventArgs e)
         {
-            if (GameBoard.is_playing)
+            if (Game.Is_Playing && Game.NowGame.Is_TurnToPlay) 
             {
-                GameBoard.main.Print(e, GameBoard.mycolor);
+                Game.NowGame.Print(e, Game.NowGame.myColor);
             }
         }
 

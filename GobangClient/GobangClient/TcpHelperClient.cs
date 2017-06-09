@@ -67,36 +67,36 @@ namespace GobangClient
                     break;
                 case CodeNum.useblackpiece:
                     ControlHander.Write(2, "您执黑先行");
-                    GameBoard.GameBegin(GameBoard.Black);
+                    Game.GameBegin(CodeNum.blackpiece);
                     break;
                 case CodeNum.usewhitepiece:
                     ControlHander.Write(2, "您执白后行");
-                    GameBoard.GameBegin(GameBoard.White);
+                    Game.GameBegin(CodeNum.whitepiece);
                     break;
                 case CodeNum.miss_connect:
                     ControlHander.Write(2, "对手掉线，请等待下一场对局");
-                    GameBoard.is_playing = false;
+                    Game.Is_Playing = false;
                     break;
                 case CodeNum.time_to_play:
                     ControlHander.Write(2, "现在轮到您行子");
-                    GameBoard.is_turn_to_play = true;
+                    Game.NowGame.Is_TurnToPlay = true;
                     break;
                 case CodeNum.you_are_loster:
                     ControlHander.Write(2, "你输了");
-                    GameBoard.is_playing = false;
-                    GameBoard.is_turn_to_play = false;
+                    Game.Is_Playing = false;
+                    Game.NowGame.Is_TurnToPlay = false;
                     break;
                 case CodeNum.you_are_winner:
                     ControlHander.Write(2, "你赢了");
-                    GameBoard.is_playing = false;
-                    GameBoard.is_turn_to_play = false;
+                    Game.Is_Playing = false;
+                    Game.NowGame.Is_TurnToPlay = false;
                     break;
                 default:
                     break;
             }
             if (CodeNum.IsCodeNum205(code))
             {
-                GameBoard.main.Print(CodeNum.HandleCodeNum205(code), GameBoard.othercolor);
+                Game.NowGame.Print(CodeNum.HandleCodeNum205(code), Game.NowGame.otherColor);
             }
         }
         private string RenderStringFromServer(string input)

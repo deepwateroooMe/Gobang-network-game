@@ -66,7 +66,7 @@ namespace GobangServer
         }
         private void dealwithcodenum205(Player whocodefrom, string codenum205)
         {
-            int piece = (whocodefrom == black) ? GameManual.blackpiece : GameManual.whitepiece;
+            int piece = (whocodefrom == black) ? CodeNum.blackpiece : CodeNum.whitepiece;
             Player other = getotherplayer(whocodefrom);
             gamemanual.PlayChess(codenum205, piece);
             other.Writer(codenum205);
