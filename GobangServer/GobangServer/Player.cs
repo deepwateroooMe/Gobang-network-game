@@ -13,16 +13,14 @@ namespace GobangServer
         public TcpClient TcpClient = null;
         private StreamReader sr = null;
         private StreamWriter sw = null;
-        public NetworkStream TcpStream = null;
         public Queue<string> MessageBox = new Queue<string>();
         public Thread ReaderThread;
-        public bool is_connect = true;
+        public bool Is_Connect = true;
         public Player(TcpClient tcpclient)
         {
             TcpClient = tcpclient;
-            TcpStream = TcpClient.GetStream();
-            sr = new StreamReader(TcpStream);
-            sw = new StreamWriter(TcpStream);
+            sr = new StreamReader(tcpclient.GetStream());
+            sw = new StreamWriter(tcpclient.GetStream());
             ReaderThread = new Thread(new ThreadStart(ReadtoBoxThreadwork));
             ReaderThread.Start();
         }
@@ -35,33 +33,19 @@ namespace GobangServer
             }
             else
             {
-                if (is_connect)
-                {
-                    Counter.TotalPlayer--;
-                    Console.WriteLine(Counter.TotalPlayer);
-                }
-                is_connect = false;
-                ReaderThread.Abort();
+                endplayer();
             }
+        }
+        private void endplayer()
+        {
+            Is_Connect = false;
+            Counter.EndPlayer();
+            ReaderThread.Abort();
         }
         public void ReadtoBoxThreadwork()
         {
             string message;
-            try
-            {
-                message = sr.ReadLine();
-                NickName = message.Substring(5);
-            }
-            catch
-            {
-                if (is_connect)
-                {
-                    Counter.TotalPlayer--;
-                    Console.WriteLine("在线人数：" + Counter.TotalPlayer);
-                }
-                is_connect = false;
-                ReaderThread.Abort();
-            }
+            NickName = getnickname();
             while (true)
             {
                 try
@@ -71,14 +55,21 @@ namespace GobangServer
                 }
                 catch
                 {
-                    if (is_connect)
-                    {
-                        Counter.TotalPlayer--;
-                        Console.WriteLine("在线人数：" + Counter.TotalPlayer);
-                    }
-                    is_connect = false;
-                    ReaderThread.Abort();
+                    endplayer();
                 }
+            }
+        }
+        private string getnickname()
+        {
+            try
+            {
+                string message = sr.ReadLine();
+                return message.Substring(5);
+            }
+            catch
+            {
+                endplayer();
+                return "";
             }
         }
     }

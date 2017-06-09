@@ -43,8 +43,6 @@ namespace GobangServer
                     p2.Writer(CodeNum.have_playing);
                     Game game = new Game(p1, p2);
                     ListForGame.Add(game);
-                    Counter.TotalGame++;
-                    Console.WriteLine("当前对局数：" + Counter.TotalGame);
                 }
             }
         }

@@ -28,6 +28,7 @@ namespace GobangClassLibrary
         public static bool IsCodeNum205(string input)
         {
             Regex regex = new Regex("^\\$205:\\d+,\\d+$");
+            input += "";
             return regex.IsMatch(input);
         }
         public static Point HandleCodeNum205(string codenum205)

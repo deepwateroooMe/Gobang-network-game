@@ -13,6 +13,7 @@ namespace GobangServer
         public GameManual gamemanual = new GameManual();
         public Game(Player p1, Player p2)
         {
+            Counter.CreateGame();
             white = p1;
             black = p2;
             TalkerThread = new Thread(new ThreadStart(TalkThreadwork));
@@ -25,7 +26,7 @@ namespace GobangServer
             string content;
             while (true)
             {
-                if (white.is_connect)
+                if (white.Is_Connect)
                 {
                     while (white.MessageBox.Count != 0)
                     {
@@ -37,7 +38,7 @@ namespace GobangServer
                 {
                     dealwithmisconnection(white);
                 }
-                if (black.is_connect)
+                if (black.Is_Connect)
                 {
                     while (black.MessageBox.Count != 0)
                     {
@@ -79,7 +80,7 @@ namespace GobangServer
         private void dealwithmisconnection(Player whomisconnection)
         {
             Player other = getotherplayer(whomisconnection);
-            if(other.is_connect)
+            if(other.Is_Connect)
             {
                 other.Writer(CodeNum.miss_connect);
                 TcpHelperServer.QueueForPlayer.Enqueue(other);
@@ -89,9 +90,8 @@ namespace GobangServer
         private void abortthisgame()
         {
             is_playing = false;
+            Counter.EndGame();
             TalkerThread.Abort();
-            Counter.TotalGame--;
-            Console.WriteLine("当前对局数：" + Counter.TotalGame);
         }
         private Player getotherplayer(Player playernow)
         {
