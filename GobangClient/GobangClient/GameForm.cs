@@ -34,12 +34,7 @@ namespace GobangClient
                 Game.NowGame.Print(e, Game.NowGame.myColor);
             }
         }
-
-        private void GameForm_Load(object sender, EventArgs e)
-        {
-            TcpHelperClient.Init();
-        }
-
+        
         private void GameForm_FormClosed(object sender, FormClosedEventArgs e)
         {
             Application.Exit();

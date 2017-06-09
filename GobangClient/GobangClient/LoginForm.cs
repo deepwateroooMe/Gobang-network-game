@@ -19,11 +19,12 @@ namespace GobangClient
             }
             else
             {
+                GameForm gameform = new GameForm();
+                this.Hide();
+                TcpHelperClient.Init();
                 string Nickname = txtNickName.Text.Trim();
                 TcpHelperClient.Writer("name:" + Nickname);
                 TcpHelperClient.NickName = Nickname;
-                GameForm gameform = new GameForm();
-                this.Hide();
                 gameform.ShowDialog();
             }
         }
