@@ -11,6 +11,7 @@
 * ![总览](http://xiaoliming96.com/images/gobang/gobang_main.png)  
 * ![服务器部分](http://xiaoliming96.com/images/gobang/gobang_server.png)  
 * ![客户机部分](http://xiaoliming96.com/images/gobang/gobang_client.png)  
+* ![类图](http://xiaoliming96.com/images/gobang/gobang_classmap.png)
 
 
 ### 待做事项

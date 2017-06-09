@@ -20,19 +20,15 @@ namespace GobangClient
         /// <summary>
         /// 在控件中利用委派写入数据
         /// </summary>
-        /// <param name="code">1表示rtxtRoom，2表示rtxtState</param>
-        /// <param name="content"></param>
-        public static void Write(int code, string content)
+        public static void Write(int whichrtxt, string content)
         {
-            switch (code)
+            switch (whichrtxt)
             {
-                case 1:
+                case CodeNum.rtxtRoom:
                     rtxtRoom.Invoke(setroom, content);
                     break;
-                case 2:
+                case CodeNum.rtxtState:
                     rtxtState.Invoke(setstate, content);
-                    break;
-                default:
                     break;
             }
         }

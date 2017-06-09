@@ -61,7 +61,7 @@ namespace GobangClient
             {
                 mousex = get_index(mousex);
                 mousey = get_index(mousey);
-                TcpHelperClient.main.Writer(CodeNum.CreatCodeNum205(mousex, mousey));
+                TcpHelperClient.Writer(CodeNum.CreatCodeNum205(mousex, mousey));
                 Is_TurnToPlay = false;
             }
             else

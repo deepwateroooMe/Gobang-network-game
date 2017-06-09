@@ -19,9 +19,8 @@ namespace GobangClient
             }
             else
             {
-                TcpHelperClient thc = TcpHelperClient.main;
                 string Nickname = txtNickName.Text.Trim();
-                thc.Writer("name:" + Nickname);
+                TcpHelperClient.Writer("name:" + Nickname);
                 TcpHelperClient.NickName = Nickname;
                 GameForm gameform = new GameForm();
                 this.Hide();

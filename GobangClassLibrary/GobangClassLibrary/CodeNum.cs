@@ -7,6 +7,8 @@ namespace GobangClassLibrary
 {
     public class CodeNum
     {
+        public const int rtxtRoom = 1;
+        public const int rtxtState = 2;
         public const int whitepiece = 1;
         public const int blackpiece = -1;
         public const int noresult = 0;
