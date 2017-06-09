@@ -18,6 +18,7 @@ namespace GobangServer
         public bool Is_Connect = true;
         public Player(TcpClient tcpclient)
         {
+            Counter.CreatePlayer();
             TcpClient = tcpclient;
             sr = new StreamReader(tcpclient.GetStream());
             sw = new StreamWriter(tcpclient.GetStream());

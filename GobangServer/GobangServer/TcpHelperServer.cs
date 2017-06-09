@@ -9,17 +9,15 @@ namespace GobangServer
 {
     public class TcpHelperServer
     {
-        public static Queue<int> queue { get; set; }
         public static Queue<Player> QueueForPlayer = new Queue<Player>();
-        public static List<Game> ListForGame = new List<Game>();
-        private static int ServerPort = 9961;
-        private static IPEndPoint ServerIPEndPoint = new IPEndPoint(IPAddress.Any, ServerPort);
+        public static List<Game> GameList = new List<Game>();
         private static TcpListener TcpListener = null;
         public Thread ListenerThread = null;
         public Thread GameMakerThread = null;
         public Thread GameDestroyerThread = null;
         public TcpHelperServer()
         {
+            IPEndPoint ServerIPEndPoint = new IPEndPoint(IPAddress.Any, 9961);
             TcpListener = new TcpListener(ServerIPEndPoint);
             TcpListener.Start();
             ListenerThread = new Thread(new ThreadStart(AcceptPlayerConnectionThreadwork));
@@ -39,10 +37,8 @@ namespace GobangServer
                 {
                     Player p1 = QueueForPlayer.Dequeue();
                     Player p2 = QueueForPlayer.Dequeue();
-                    p1.Writer(CodeNum.have_playing);
-                    p2.Writer(CodeNum.have_playing);
                     Game game = new Game(p1, p2);
-                    ListForGame.Add(game);
+                    GameList.Add(game);
                 }
             }
         }
@@ -54,8 +50,6 @@ namespace GobangServer
                 Player player = new Player(newclient);
                 QueueForPlayer.Enqueue(player);
                 player.Writer(CodeNum.have_connect);
-                Counter.TotalPlayer++;
-                Console.WriteLine("在线人数：" + Counter.TotalPlayer);
             }
         }
     }

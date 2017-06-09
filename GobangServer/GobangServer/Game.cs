@@ -16,6 +16,8 @@ namespace GobangServer
             Counter.CreateGame();
             white = p1;
             black = p2;
+            white.Writer(CodeNum.have_playing);
+            black.Writer(CodeNum.have_playing);
             TalkerThread = new Thread(new ThreadStart(TalkThreadwork));
             TalkerThread.Start();
             white.Writer(CodeNum.usewhitepiece);

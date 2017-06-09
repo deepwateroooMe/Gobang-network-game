@@ -77,7 +77,7 @@ namespace GobangServer
                 return true;
             havetouch = -1;
             #endregion
-            #region"正斜"
+            #region"撇"
             x = indexx; y = indexy;
             for (; x < 15 && y < 15;)
             {
@@ -100,7 +100,7 @@ namespace GobangServer
                 return true;
             havetouch = -1;
             #endregion
-            #region"负斜"
+            #region"捺"
             x = indexx; y = indexy;
             for (; x < 15 && y >= 0;)
             {
