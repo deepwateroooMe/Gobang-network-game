@@ -8,10 +8,10 @@
 
 ### 逻辑框图
 
-* ![总览](http://xiaoliming96.com/images/gobang/gobang_main.png)  
-* ![服务器部分](http://xiaoliming96.com/images/gobang/gobang_server.png)  
-* ![客户机部分](http://xiaoliming96.com/images/gobang/gobang_client.png)  
-* ![类图](http://xiaoliming96.com/images/gobang/gobang_classmap.png)
+* ![总览](https://github.com/South-Walker/Gobang-network-game/raw/master/gobangimage/gobang_main.png)  
+* ![服务器部分](https://github.com/South-Walker/Gobang-network-game/raw/master/gobangimage/gobang_server.png)  
+* ![客户机部分](https://github.com/South-Walker/Gobang-network-game/raw/master/gobangimage/gobang_client.png)  
+* ![类图](https://github.com/South-Walker/Gobang-network-game/raw/master/gobangimage/gobang_classmap.png)
 
 
 ### 待做事项
@@ -155,8 +155,10 @@
 >   * 重写了Game类
 >   * 重写了Player类
 
-####
+#### 2017-6-9
+
 > 如果一个方法叫做Print，那么这个方法就一定会打印出东西，如果存在某种情况这个方法不能打印出东西，那么请重构代码，在调用前判断清楚
+>* 重构了客户端代码
 
 ### 附录
 
