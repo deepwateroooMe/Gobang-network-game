@@ -49,6 +49,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="CodeNum.cs" />
     <Compile Include="ControlHander.cs" />
     <Compile Include="GameForm.cs">
       <SubType>Form</SubType>

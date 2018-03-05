@@ -47,6 +47,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="CodeNum.cs" />
     <Compile Include="Counter.cs" />
     <Compile Include="Game.cs" />
     <Compile Include="GameManual.cs" />
