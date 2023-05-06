@@ -4,11 +4,8 @@ using System.Threading;
 using System.IO;
 using System.Net.Sockets;
 using GobangClassLibrary;
-
-namespace GobangServer
-{
-    public class Player
-    {
+namespace GobangServer {
+    public class Player {
         public string NickName = "无名氏";
         public TcpClient TcpClient = null;
         private StreamReader sr = null;
@@ -16,8 +13,8 @@ namespace GobangServer
         public Queue<string> MessageBox = new Queue<string>();
         public Thread ReaderThread;
         public bool Is_Connect = true;
-        public Player(TcpClient tcpclient)
-        {
+
+        public Player(TcpClient tcpclient) {
             Counter.CreatePlayer();
             TcpClient = tcpclient;
             sr = new StreamReader(tcpclient.GetStream());
@@ -25,50 +22,37 @@ namespace GobangServer
             ReaderThread = new Thread(new ThreadStart(ReadtoBoxThreadwork));
             ReaderThread.Start();
         }
-        public void Writer(string message)
-        {
-            if (TcpClient.Connected)
-            {
+        public void Writer(string message) {
+            if (TcpClient.Connected) {
                 sw.WriteLine(message);
                 sw.Flush();
-            }
-            else
-            {
+            } else {
                 endplayer();
             }
         }
-        private void endplayer()
-        {
+        private void endplayer() {
             Is_Connect = false;
             Counter.EndPlayer();
             ReaderThread.Abort();
         }
-        public void ReadtoBoxThreadwork()
-        {
+        public void ReadtoBoxThreadwork() {
             string message;
             NickName = getnickname();
-            while (true)
-            {
-                try
-                {
+            while (true) {
+                try {
                     message = sr.ReadLine();
                     MessageBox.Enqueue(message);
-                }
-                catch
-                {
+                } catch { // 可以不带参数使用 catch 子句来捕获任何类型的异常
                     endplayer();
                 }
             }
         }
-        private string getnickname()
-        {
-            try
-            {
+        private string getnickname() {
+            try {
                 string message = sr.ReadLine();
                 return message.Substring(5);
             }
-            catch
-            {
+            catch {
                 endplayer();
                 return "";
             }

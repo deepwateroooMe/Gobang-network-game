@@ -1,0 +1,10 @@
+#+latex_class: cn-article
+#+title: GoBang WinForm game -- 北居五子棋
+
+- having not really any win-form project. 
+- list one for reference.
+- This one is web 2 players game.
+
+[[./pic/readme_20230505_203257.png]]
+
+- 会把这个项目的源码，网络的部分全读懂了

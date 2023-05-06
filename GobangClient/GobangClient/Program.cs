@@ -4,17 +4,13 @@ using System.Linq;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using GobangClassLibrary;
+namespace GobangClient {
+    static class Program {
 
-namespace GobangClient
-{
-    static class Program
-    {
-        /// <summary>
-        /// 应用程序的主入口点。
-        /// </summary>
+        // 应用程序的主入口点。
         [STAThread]
-        static void Main()
-        {
+        static void Main() {
+
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
             Application.Run(new LoginForm());
